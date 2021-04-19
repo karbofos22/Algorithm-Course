@@ -9,6 +9,7 @@ namespace Lesson1_Homework
         {
             public int X { get; set; }
             public bool Expected { get; set; }
+            public int ExpectedFibo { get; set; }
             public Exception ExpectedException { get; set; }
         }
 
@@ -26,13 +27,19 @@ namespace Lesson1_Homework
             //TestSimpleOrNot(testCase4);
             //var testCase5 = new TestCase() { X = -5, Expected = false };
             //TestSimpleOrNot(testCase5);
+            var testCase6 = new TestCase() { X = 22, ExpectedFibo = FibonachiCycle(22) };
+            TestFibonachiCycle(testCase6);
+            var testCase7 = new TestCase() { X = 76, ExpectedFibo = FibonachiCycle(22) };
+            TestFibonachiCycle(testCase7);
+            var testCase8 = new TestCase() { X = -3, ExpectedFibo = FibonachiCycle(22) };
+            TestFibonachiCycle(testCase8);
 
             //Задание 2. Определить сложность функции
             //StrangeSum();  // -- сложность функции равняется O(F(N*N*N))
 
             //Задание 3. Определить сложность функции
-            Console.WriteLine(FibonachiRecurs(22));
-            Console.WriteLine(FibonachiCycle(22));
+            //Console.WriteLine(FibonachiRecurs(0));
+            //Console.WriteLine(FibonachiCycle(22));
         }
 
         static bool SimpleOrNot(int x)
@@ -113,6 +120,10 @@ namespace Lesson1_Homework
 
         static int FibonachiRecurs(int fiboNumber)
         {
+            if (fiboNumber < 0)
+            {
+                throw new ArgumentException("Введенное число меньше нуля");
+            }
             if (fiboNumber == 0)
                 return 0;
             if (fiboNumber == 1)
@@ -121,6 +132,10 @@ namespace Lesson1_Homework
         }
         static int FibonachiCycle(int fiboNumber)
         {
+            if (fiboNumber < 0)
+            {
+                throw new ArgumentException("Введенное число меньше нуля");
+            }
             int finalFibo = 0;
             int fiboNumber1 = 1;
             int num;
@@ -133,6 +148,32 @@ namespace Lesson1_Homework
             }
 
             return finalFibo;
+        }
+        static void TestFibonachiCycle(TestCase testCase)
+        {
+            try
+            {
+                var actual = FibonachiCycle(testCase.X);
+                if (actual == testCase.ExpectedFibo)
+                {
+                    Console.WriteLine($"VALID TEST\tРезультат расчета введеного числа {testCase.X} - совпадет с расчетом ожидаемого {FibonachiCycle(22)} ");
+                }
+                else
+                {
+                    Console.WriteLine($"INVALID TEST\tРезультат расчета введеного числа {testCase.X} - НЕ совпадет с расчетом ожидаемого {FibonachiCycle(22)}");
+                }
+            }
+            catch (Exception ex)
+            {
+                if (testCase.ExpectedException != null)
+                {
+                    Console.WriteLine("VALID TEST");
+                }
+                else
+                {
+                    Console.WriteLine(ex.Message);
+                }
+            }
         }
     }
 }
